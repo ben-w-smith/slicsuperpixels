@@ -460,12 +460,14 @@ function onSuccessImageLoad(image, options) {
 
 // Public API.
 module.exports = function (imageData, options) {
-    if (typeof options === "undefined") options = {};
+    options = options || {};
+
     // the lateral side of a rectangle superpixel in pixels.
-    if (options.regionSize === undefined) options.regionSize = 40;
-    options.regionSize = Math.round(options.regionSize);
+    options.regionSize = options.regionSize || 40
+    options.regionSize = Math.round(options.regionSize)
+
     // width or high should be larger than 20 pixels
-    if (options.minRegionSize === undefined)
-        options.minRegionSize = options.regionSize * options.regionSize / 4;
+    options.minRegionSize = options.minRegionSize || (options.regionSize * options.regionSize / 4)
+
     onSuccessImageLoad(imageData, options);
 };
