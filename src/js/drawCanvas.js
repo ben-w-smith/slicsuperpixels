@@ -60,10 +60,8 @@ var drawCanvas = {
 
         this.prevx = this.currx
         this.prevy = this.curry
-        this.currx = e.clientX - this.canvas.offsetParent.offsetLeft
-        this.curry = e.clientY - this.canvas.offsetParent.offsetTop
-        // this.currx = e.layerX
-        // this.curry = e.layerY
+        this.currx = e.layerX
+        this.curry = e.layerY
 
         if(action == 'down') {
             this.drawing = true 
