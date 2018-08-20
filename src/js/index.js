@@ -1,5 +1,7 @@
 import "../sass/main.scss"
 var SLICSuperPixels = require("./SLICSuperPixels")
+var pixelDiff = require('./pixelDiff')
+var drawCanvas = require('./drawCanvas')
 
 //----------------------
 // Not library code
@@ -24,83 +26,15 @@ var sctx = srcc.getContext("2d");
 var mctx = mask.getContext("2d");
 var octx = outc.getContext("2d");
 
-// variables
-var mask_color = "green"
-var mask_width = 2
-var mask_drawing = false
-var prevx = 0
-var prevy = 0
-var currx = 0
-var curry = 0
-var mask_events = [
-    { 
-        event: "mousemove",
-        action: "move",
-    },
-    {
-        event: "mousedown",
-        action: "down",
-    },
-    {
-        event: "mouseup",
-        action: "up",
-    },
-    {
-        event: "mouseout",
-        action: "out",
-    },
-]
-
-mask_events.forEach(function(mevent) {
-    mask.addEventListener(mevent.event, function(e) {
-        findxy(mevent.action, e)
-    }, false)
-})
-
 keep.addEventListener("click", function() {
-    mask_color = "green"
+	drawCanvas.setColor = "green"
 })
 cut.addEventListener("click", function() {
-    mask_color = "red"
+	drawCanvas.setColor = "red"
 })
 clear.addEventListener("click", function() {
-    mctx.clearRect(0, 0, mask.width, mask.height)
+	drawCanvas.eraseAll()
 })
-
-function draw_mask() {
-    mctx.beginPath()
-    mctx.moveTo(prevx, prevy)
-    mctx.lineTo(currx, curry)
-    mctx.strokeStyle = mask_color
-    mctx.lineWidth = mask_width
-    mctx.stroke()
-    mctx.closePath()
-}
-
-function findxy(action, e) {
-    if(action == 'up' || action == 'out') {
-        mask_drawing = false
-        return
-    }
-
-    prevx = currx
-    prevy = curry
-    currx = e.clientX - mask.offsetParent.offsetLeft
-    curry = e.clientY - mask.offsetParent.offsetTop
-
-    if(action == 'down') {
-        mask_drawing = true 
-
-        mctx.beginPath() 
-        mctx.fillStyle = mask_color 
-        mctx.fillRect(currx, curry, mask_width, mask_width) 
-        mctx.closePath() 
-    }
-
-    if(action == 'move' && mask_drawing) {
-        draw_mask()
-    }
-}
 
 show.addEventListener("click", function() {
 	loadImage();
@@ -125,7 +59,9 @@ function loadImage() {
 			
 			mask.width = srcc.width;
 			mask.height = srcc.height;
-			
+			drawCanvas.init(mask);
+
+			// show keep, cut, clear, segment and edge controls
 			scontrols.style.display = "inherit";
 		};
 		img.src = reader.result;
