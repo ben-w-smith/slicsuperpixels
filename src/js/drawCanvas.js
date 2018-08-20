@@ -1,3 +1,7 @@
+// Todo: 
+// 1 - make prev and curr objects rather than 4 separate vars
+// 2 - move drawLine and findxy outside of object so they are private methods
+
 var drawCanvas = {
     canvas: false,
     ctx: false,
