@@ -244,7 +244,7 @@ function labelUnknownPixels(results) {
 		var keepDist = Math.min.apply(null, keepList);
 		var cutDist = Math.min.apply(null, cutList);
 
-		if(keepDist > cutDist) {
+		if(keepDist < cutDist) {
 			seg.keep = true;
 			results.keep.push(results.unknown[i])
 		} else {
