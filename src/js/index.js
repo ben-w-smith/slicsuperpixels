@@ -80,7 +80,7 @@ function loadImage() {
 function drawSuperPixels() {
 	var srcImageData = sctx.getImageData(0, 0, srcc.width, srcc.height);
 	var options = {
-		regionSize: ((srcc.width + srcc.height) / 2 / 10),
+		regionSize: (((srcc.width + srcc.height) / 2) / 10),
 		callback: function(results) {
 			results = renderSuperPixels(results);
 			results = renderCrop(results);
