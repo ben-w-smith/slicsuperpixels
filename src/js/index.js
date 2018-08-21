@@ -49,7 +49,7 @@ segment.addEventListener("click", function() {
 	drawSuperPixels();
 }, {passive: true });
 
-
+// load the selected image onto the src canvas
 function loadImage() {
 	var file = uploader.files[0];
 	var reader = new FileReader();
@@ -77,57 +77,63 @@ function loadImage() {
 	if (file) reader.readAsDataURL(file);
 }
 
+// processes the image superpixels and other options, callback draws image onto output canvas
 function drawSuperPixels() {
 	var srcImageData = sctx.getImageData(0, 0, srcc.width, srcc.height);
 	var options = {
 		regionSize: (((srcc.width + srcc.height) / 2) / 10),
-		callback: function(results) {
-			results = renderSuperPixels(results);
-			results = renderCrop(results);
-			console.log('results', results);
-
-			outc.width = results.width;
-			outc.height = results.height;
-
-			var outImageData = octx.createImageData(outc.width, outc.height);
-			var srcImageData = sctx.getImageData(0, 0, srcc.width, srcc.height);
-
-			// create reference variable that is mutable
-			var odata = outImageData.data;
-			var sdata = srcImageData.data;
-
-			var showEdges = edges.checked || false;
-			var showCrop = crop.checked || false;
-			var showSuperPixels = spixels.checked || false;
-
-			for(var i = 0; i < results.indexMap.length; ++i) {
-				var seg = results.segments[results.indexMap[i]];
-
-                odata[4 * i + 3] = 255;
-				if(showCrop) {
-					if(seg.cut) odata[4 * i + 3] = 0;
-					if(seg.mixed) odata[4 * i + 3] = 0;
-				}
-				if(showEdges && results.indexMap[i] != results.indexMap[i + 1]) {
-					odata[4 * i + 0] = 0;	
-					odata[4 * i + 1] = 0;	
-					odata[4 * i + 2] = 0;	
-					odata[4 * i + 3] = 255;
-				} else if(showSuperPixels) {
-					odata[4 * i + 0] = seg.mp[0];
-					odata[4 * i + 1] = seg.mp[1];
-					odata[4 * i + 2] = seg.mp[2];
-				} else {
-					odata[4 * i + 0] = sdata[4 * i + 0];
-					odata[4 * i + 1] = sdata[4 * i + 1];
-					odata[4 * i + 2] = sdata[4 * i + 2];
-				}
-
-			}
-			octx.putImageData(outImageData, 0, 0);
-		},
+		callback: renderNewImage,
     };
 	SLICSuperPixels(srcImageData, options);
+}
+
+// shows the new image with the selected options - superpixels, edges, crop, etc.
+function renderNewImage(results) {
+	// finds average color of each superpixel
+	results = renderSuperPixels(results);
+	// decides if a superpixel should be cropped
+	results = renderCrop(results);
+	console.log('results', results);
+
+	outc.width = results.width;
+	outc.height = results.height;
+
+	var outImageData = octx.createImageData(outc.width, outc.height);
+	var srcImageData = sctx.getImageData(0, 0, srcc.width, srcc.height);
+
+	// create reference variable that is mutable
+	var odata = outImageData.data;
+	var sdata = srcImageData.data;
+
+	var showEdges = edges.checked || false;
+	var showCrop = crop.checked || false;
+	var showSuperPixels = spixels.checked || false;
+
+	for(var i = 0; i < results.indexMap.length; ++i) {
+		var seg = results.segments[results.indexMap[i]];
+
+		odata[4 * i + 3] = 255;
+		if(showCrop) {
+			if(seg.cut) odata[4 * i + 3] = 0;
+			if(seg.mixed) odata[4 * i + 3] = 0;
+		}
+		if(showEdges && results.indexMap[i] != results.indexMap[i + 1]) {
+			odata[4 * i + 0] = 0;	
+			odata[4 * i + 1] = 0;	
+			odata[4 * i + 2] = 0;	
+			odata[4 * i + 3] = 255;
+		} else if(showSuperPixels) {
+			odata[4 * i + 0] = seg.mp[0];
+			odata[4 * i + 1] = seg.mp[1];
+			odata[4 * i + 2] = seg.mp[2];
+		} else {
+			odata[4 * i + 0] = sdata[4 * i + 0];
+			odata[4 * i + 1] = sdata[4 * i + 1];
+			odata[4 * i + 2] = sdata[4 * i + 2];
+		}
+
+	}
+	octx.putImageData(outImageData, 0, 0);
 }
 
 // calculates the average rgba of each superpixel
@@ -153,13 +159,6 @@ function renderSuperPixels(results) {
 		results.segments[s].mp[0] = results.segments[s].mp[0] / results.segments[s].count
 		results.segments[s].mp[1] = results.segments[s].mp[1] / results.segments[s].count
 		results.segments[s].mp[2] = results.segments[s].mp[2] / results.segments[s].count
-
-		// // log edges of superpixel
-		// results.segments[s].edges = {}
-		// for(var a in results.segments) {
-		// 	results.segments[s].edges[a] = 0
-		// 	if(s != a) results.segments[s].edges[a] = 1
-		// }
 	}
 	return results;
 }
