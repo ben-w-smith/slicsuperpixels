@@ -74,4 +74,4 @@ function blend(channel, alpha) {
     return 255 + (channel - 255) * (alpha / 255)
 }
 
-module.exports = pixelDiff
+export default pixelDiff

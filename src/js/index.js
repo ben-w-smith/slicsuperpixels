@@ -1,14 +1,10 @@
 import "../sass/main.scss"
-var SLICSuperPixels = require("./SLICSuperPixels")
-var pixelDiff = require('./pixelDiff')
-var drawCanvas = require('./drawCanvas')
-
-//----------------------
-// Not library code
-//----------------------
+import SLICSuperPixels from "./SLICSuperPixels";
+import pixelDiff from './pixelDiff';
+import drawCanvas from './drawCanvas';
 
 // downsize images so stuff doesn't take long to process while dev'ing
-var down_size = 1;
+var down_size = 2;
 
 // controls
 var uploader 	= document.getElementById("uploader");

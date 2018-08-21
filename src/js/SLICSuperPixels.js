@@ -201,7 +201,8 @@ function eliminateSmallRegions(
         y,
         xp,
         yp,
-        direction;
+        direction,
+        neighbor;
     //console.log(segmentation)
     for (pixel = 0; pixel < numPixels; pixel++) {
         if (cleaned[pixel]) continue;
@@ -459,7 +460,7 @@ function onSuccessImageLoad(image, options) {
 }
 
 // Public API.
-module.exports = function (imageData, options) {
+export default function (imageData, options) {
     options = options || {};
 
     // the lateral side of a rectangle superpixel in pixels.

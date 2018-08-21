@@ -7,7 +7,7 @@ var drawCanvas = {
     ctx: false,
     line: {
         color: "green",
-        width: 2,
+        width: 10,
     },
     drawing: false,
     prevx: 0,
@@ -34,6 +34,7 @@ var drawCanvas = {
     ],
     init: function(canvas) {
         this.canvas = canvas
+        this.canvas.style.opacity = "0.65"
         this.ctx = this.canvas.getContext('2d')
         this.canvasEvents.forEach(function(cEvent) {
             this.canvas.addEventListener(cEvent.event, function(e) {
@@ -52,9 +53,10 @@ var drawCanvas = {
         this.ctx.moveTo(this.prevx, this.prevy)
         this.ctx.lineTo(this.currx, this.curry)
         this.ctx.strokeStyle = this.line.color
+        this.ctx.lineJoin = "round"
         this.ctx.lineWidth = this.line.width
-        this.ctx.stroke()
         this.ctx.closePath()
+        this.ctx.stroke()
     },
     findxy: function(action, e) {
         if(action == 'up' || action == 'out') {
@@ -71,8 +73,8 @@ var drawCanvas = {
             this.drawing = true 
 
             this.ctx.beginPath() 
-            this.ctx.fillStyle = this.color
-            this.ctx.fillRect(this.currx, this.curry, this.line.width, this.line.height) 
+            this.ctx.fillStyle = this.line.color
+            this.ctx.arc(this.currx, this.curry, this.line.width / 2, 0, Math.PI * 2, false)
             this.ctx.closePath() 
         }
 
@@ -82,4 +84,4 @@ var drawCanvas = {
     }
 }
 
-module.exports = drawCanvas
+export default drawCanvas
