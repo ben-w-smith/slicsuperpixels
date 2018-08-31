@@ -7,17 +7,17 @@ import drawCanvas from './drawCanvas';
 var down_size = 2;
 
 // controls
-var uploader 	= document.getElementById("uploader");
-var show 		= document.getElementById("show");
+var uploader    = document.getElementById("uploader");
+var show        = document.getElementById("show");
 var scontrols   = document.getElementById("segment-controls");
 var segment     = document.getElementById("segment");
-var keep 		= document.getElementById("keep");
-var cut 		= document.getElementById("cut");
-var clear 		= document.getElementById("clear");
-var segment 	= document.getElementById("segment");
-var edges 		= document.getElementById("edges");
-var crop 		= document.getElementById("crop");
-var spixels 	= document.getElementById("superpixels");
+var keep        = document.getElementById("keep");
+var cut         = document.getElementById("cut");
+var clear       = document.getElementById("clear");
+var segment     = document.getElementById("segment");
+var edges       = document.getElementById("edges");
+var crop        = document.getElementById("crop");
+var spixels     = document.getElementById("superpixels");
 
 // canvas stuff
 var srcc = document.getElementById("src");
@@ -246,18 +246,17 @@ function labelUnknownPixels(results) {
 			seg.cut = true;
 			results.cut.push(results.unknown[i])
 		}
-
-		results.keep.sort(function(a, b) {
-			return parseInt(a) - parseInt(b)
-		})
-		results.cut.sort(function(a, b) {
-			return parseInt(a) - parseInt(b)
-		})
-		results.unknown.sort(function(a, b) {
-			return parseInt(a) - parseInt(b)
-		})
-		// results.unknown.shift()
 	}
+
+	results.keep.sort(function(a, b) {
+		return parseInt(a) - parseInt(b)
+	})
+	results.cut.sort(function(a, b) {
+		return parseInt(a) - parseInt(b)
+	})
+	results.unknown.sort(function(a, b) {
+		return parseInt(a) - parseInt(b)
+	})
 
 	return results;
 }
