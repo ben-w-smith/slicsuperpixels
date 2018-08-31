@@ -1,7 +1,3 @@
-// Todo: 
-// 1 - make prev and curr objects rather than 4 separate vars
-// 2 - move drawLine and findxy outside of object so they are private methods
-
 var drawCanvas = {
 	canvas: false,
 	ctx: false,
@@ -42,7 +38,7 @@ var drawCanvas = {
 		this.ctx = this.canvas.getContext('2d')
 		this.canvasEvents.forEach(function(cEvent) {
 			this.canvas.addEventListener(cEvent.event, function(e) {
-				this.findxy(cEvent.action, e)
+				findxy.call(this, cEvent.action, e)
 			}.bind(this), false)
 		}.bind(this))
 	},
@@ -52,39 +48,41 @@ var drawCanvas = {
 	eraseAll: function() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 	},
-	drawLine: function() {
-		this.ctx.beginPath()
-		this.ctx.moveTo(this.prev.x, this.prev.y)
-		this.ctx.lineTo(this.curr.x, this.curr.y)
-		this.ctx.strokeStyle = this.line.color
-		this.ctx.lineJoin = "round"
-		this.ctx.lineWidth = this.line.width
-		this.ctx.closePath()
-		this.ctx.stroke()
-	},
-	findxy: function(action, e) {
-		if(action == 'up' || action == 'out') {
-			this.drawing = false
-			return
-		}
+}
 
-		this.prev.x = this.curr.x
-		this.prev.y = this.curr.y
-		this.curr.x = e.layerX
-		this.curr.y = e.layerY
+function drawLine() {
+	this.ctx.beginPath()
+	this.ctx.moveTo(this.prev.x, this.prev.y)
+	this.ctx.lineTo(this.curr.x, this.curr.y)
+	this.ctx.strokeStyle = this.line.color
+	this.ctx.lineJoin = "round"
+	this.ctx.lineWidth = this.line.width
+	this.ctx.closePath()
+	this.ctx.stroke()
+}
 
-		if(action == 'down') {
-			this.drawing = true 
+function findxy(action, e) {
+	if(action == 'up' || action == 'out') {
+		this.drawing = false
+		return this
+	}
 
-			this.ctx.beginPath() 
-			this.ctx.fillStyle = this.line.color
-			this.ctx.arc(this.curr.x, this.curr.y, this.line.width / 2, 0, Math.PI * 2, false)
-			this.ctx.closePath() 
-		}
+	this.prev.x = this.curr.x
+	this.prev.y = this.curr.y
+	this.curr.x = e.layerX
+	this.curr.y = e.layerY
 
-		if(action == 'move' && this.drawing) {
-			this.drawLine()
-		}
+	if(action == 'down') {
+		this.drawing = true 
+
+		this.ctx.beginPath() 
+		this.ctx.fillStyle = this.line.color
+		this.ctx.arc(this.curr.x, this.curr.y, this.line.width / 2, 0, Math.PI * 2, false)
+		this.ctx.closePath() 
+	}
+
+	if(action == 'move' && this.drawing) {
+		drawLine.call(this)
 	}
 }
 
