@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
+	<head>
 
-    </head>
-    <body>
-        <div class="flex-container">
-            <div class="flex-child">
-                <input type="file" id="uploader">
-                <button id="show">Show</button>
-            </div>
-            <div class="flex-child">
-                <canvas id="src" class=""></canvas>
-                <canvas id="mask" class=""></canvas>
-            </div>
-            <div id="segment-controls" class="flex-child">
-                <button id="keep">Keep</button>
-                <button id="cut">Cut</button>
-                <button id="clear">Clear</button>
-                <button id="segment">Segment</button>
-                <label>
-                    <input id="superpixels" type="checkbox"> SuperPixels 
-                </label>
-                <label>
-                    <input id="crop" type="checkbox" checked="checked"> Crop
-                </label>
-                <label>
-                    <input id="edges" type="checkbox"> Edges
-                </label>
-            </div>
-            <div class="flex-child">
-                <canvas id="out" class=""></canvas>
-            </div>
-        </div>
-    </body>
-    <script src="./js/index.js"></script>
+	</head>
+	<body>
+		<div class="flex-container">
+			<div class="flex-child">
+				<input type="file" id="uploader">
+				<button id="show">Show</button>
+			</div>
+			<div class="flex-child">
+				<canvas id="src" class=""></canvas>
+				<canvas id="mask" class=""></canvas>
+			</div>
+			<div id="segment-controls" class="flex-child">
+				<button id="keep">Keep</button>
+				<button id="cut">Cut</button>
+				<button id="clear">Clear</button>
+				<button id="segment">Segment</button>
+				<label>
+					<input id="superpixels" type="checkbox"> SuperPixels 
+				</label>
+				<label>
+					<input id="crop" type="checkbox" checked="checked"> Crop
+				</label>
+				<label>
+					<input id="edges" type="checkbox"> Edges
+				</label>
+			</div>
+			<div class="flex-child">
+				<canvas id="out" class=""></canvas>
+			</div>
+		</div>
+	</body>
+	<script src="./js/index.js"></script>
 </html>
